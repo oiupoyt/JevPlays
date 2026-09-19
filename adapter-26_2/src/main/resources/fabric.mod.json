@@ -17,6 +17,9 @@
   "entrypoints": {
     "client": [
       "com.typesafe.jevplayer.adapter26_2.JevPlayerClientMod"
+    ],
+    "modmenu": [
+      "com.typesafe.jevplayer.adapter26_2.JevPlayerModMenu"
     ]
   },
   "depends": {

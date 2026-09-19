@@ -15,10 +15,14 @@ import java.util.*;
 
 public final class FabricWorldSensor implements WorldSensor {
     private final Minecraft client;
-    private final boolean fairMode;
+    private boolean fairMode;
 
     public FabricWorldSensor(Minecraft client, boolean fairMode) {
         this.client = client;
+        this.fairMode = fairMode;
+    }
+
+    public void setFairMode(boolean fairMode) {
         this.fairMode = fairMode;
     }
 

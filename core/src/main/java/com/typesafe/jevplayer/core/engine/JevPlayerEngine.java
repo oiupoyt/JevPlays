@@ -100,6 +100,30 @@ public final class JevPlayerEngine implements AutoCloseable {
         }
     }
 
+    public void reloadConfig(JevPlayerConfig newConfig) {
+        if (newConfig != null) {
+            this.config.apiKey = newConfig.apiKey;
+            this.config.apiKeyEnvVar = newConfig.apiKeyEnvVar;
+            this.config.provider = newConfig.provider;
+            this.config.model = newConfig.model;
+            this.config.baseUrl = newConfig.baseUrl;
+            this.config.minDecisionIntervalMs = newConfig.minDecisionIntervalMs;
+            this.config.maxActionAgeMs = newConfig.maxActionAgeMs;
+            this.config.requestTimeoutMs = newConfig.requestTimeoutMs;
+            this.config.maxSpendUsd = newConfig.maxSpendUsd;
+            this.config.fairMode = newConfig.fairMode;
+            this.config.allowMultiplayer = newConfig.allowMultiplayer;
+            this.config.hudEnabled = newConfig.hudEnabled;
+            this.config.hudDebugPage = newConfig.hudDebugPage;
+            this.config.logLevel = newConfig.logLevel;
+            if (newConfig.confidenceThresholds != null) {
+                this.config.confidenceThresholds = new HashMap<>(newConfig.confidenceThresholds);
+            }
+            this.config.safeDefaultAction = newConfig.safeDefaultAction;
+        }
+        initProvider();
+    }
+
     public void setDecisionProvider(DecisionProvider provider) {
         this.decisionProvider = provider;
     }

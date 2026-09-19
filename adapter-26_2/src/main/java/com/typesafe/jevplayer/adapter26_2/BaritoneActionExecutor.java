@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public final class BaritoneActionExecutor implements ActionExecutorBridge {
     private final Minecraft client;
-    private final boolean fairMode;
+    private boolean fairMode;
     private String currentAction = null;
 
     private static final String[] WOOD_LOGS = {
@@ -32,6 +32,11 @@ public final class BaritoneActionExecutor implements ActionExecutorBridge {
 
     public BaritoneActionExecutor(Minecraft client, boolean fairMode) {
         this.client = client;
+        this.fairMode = fairMode;
+        configureBaritoneSettings();
+    }
+
+    public void setFairMode(boolean fairMode) {
         this.fairMode = fairMode;
         configureBaritoneSettings();
     }

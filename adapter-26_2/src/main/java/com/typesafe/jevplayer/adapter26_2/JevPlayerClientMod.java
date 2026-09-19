@@ -68,6 +68,23 @@ public class JevPlayerClientMod implements ClientModInitializer {
         return instance;
     }
 
+    public JevPlayerConfig getConfig() {
+        return config;
+    }
+
+    public void reloadConfig() {
+        loadConfig();
+        if (engine != null) {
+            engine.reloadConfig(this.config);
+        }
+        if (worldSensor != null) {
+            worldSensor.setFairMode(this.config.fairMode);
+        }
+        if (baritoneExecutor != null) {
+            baritoneExecutor.setFairMode(this.config.fairMode);
+        }
+    }
+
     public void loadConfig() {
         File file = configPath.toFile();
         if (file.exists()) {
@@ -115,6 +132,11 @@ public class JevPlayerClientMod implements ClientModInitializer {
                 inputBridge.sendChatMessage("§b[JevPlayer] HUD overlay " + (config.hudEnabled ? "§aEnabled" : "§cDisabled"));
             }
 
+            // Check F10 Config GUI toggle
+            if (inputBridge.wasConfigGuiPressed()) {
+                client.setScreenAndShow(new JevPlayerConfigScreen(null));
+            }
+
             // Advance ticks
             compositeExecutor.onTick();
             engine.tick();
@@ -146,8 +168,20 @@ public class JevPlayerClientMod implements ClientModInitializer {
                         return 1;
                     }))
                     .then(ClientCommands.literal("reload").executes(ctx -> {
-                        loadConfig();
+                        reloadConfig();
                         ctx.getSource().sendFeedback(Component.literal("§b[JevPlayer] Configuration reloaded."));
+                        return 1;
+                    }))
+                    .then(ClientCommands.literal("config").executes(ctx -> {
+                        Minecraft.getInstance().execute(() -> {
+                            Minecraft.getInstance().setScreenAndShow(new JevPlayerConfigScreen(null));
+                        });
+                        return 1;
+                    }))
+                    .then(ClientCommands.literal("gui").executes(ctx -> {
+                        Minecraft.getInstance().execute(() -> {
+                            Minecraft.getInstance().setScreenAndShow(new JevPlayerConfigScreen(null));
+                        });
                         return 1;
                     }))
                     .then(ClientCommands.literal("test_gather_wood").executes(ctx -> {

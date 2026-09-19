@@ -17,6 +17,7 @@ dependencies {
 
     compileOnly fileTree(dir: 'libs/fabric-api', include: ['*.jar'])
     compileOnly fileTree(dir: "${System.getProperty('user.home')}/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/libraries", include: ['**/*.jar'])
+    compileOnly fileTree(dir: "${System.getProperty('user.home')}/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/Performium/minecraft/mods", include: ['modmenu-*.jar'])
 }
 
 processResources {

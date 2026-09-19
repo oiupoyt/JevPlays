@@ -11,6 +11,7 @@ public final class FabricInputBridge implements InputBridge {
     private final Minecraft client;
     private final KeyMapping killSwitchKey;
     private final KeyMapping hudToggleKey;
+    private final KeyMapping configGuiKey;
 
     public FabricInputBridge(Minecraft client) {
         this.client = client;
@@ -24,6 +25,11 @@ public final class FabricInputBridge implements InputBridge {
                 GLFW.GLFW_KEY_F9,
                 KeyMapping.Category.MISC
         ));
+        this.configGuiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.jevplayer.config_gui",
+                GLFW.GLFW_KEY_F10,
+                KeyMapping.Category.MISC
+        ));
     }
 
     public boolean wasKillSwitchPressed() {
@@ -32,6 +38,10 @@ public final class FabricInputBridge implements InputBridge {
 
     public boolean wasHudTogglePressed() {
         return hudToggleKey.consumeClick();
+    }
+
+    public boolean wasConfigGuiPressed() {
+        return configGuiKey.consumeClick();
     }
 
     @Override
