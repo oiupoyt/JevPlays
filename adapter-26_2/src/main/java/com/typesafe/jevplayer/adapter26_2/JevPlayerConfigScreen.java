@@ -11,7 +11,7 @@ public class JevPlayerConfigScreen extends Screen {
     private final Screen parentScreen;
     private final JevPlayerConfig config;
 
-    private boolean isTypeSafe;
+    private String provider;
     private boolean fairMode;
 
     private EditBox apiKeyEdit;
@@ -30,12 +30,23 @@ public class JevPlayerConfigScreen extends Screen {
         super(Component.literal("JevPlayer Configuration"));
         this.parentScreen = parentScreen;
         this.config = JevPlayerClientMod.getInstance().getConfig();
-        this.isTypeSafe = "typesafe".equalsIgnoreCase(config.provider);
+        String current = config.provider != null ? config.provider.trim().toLowerCase() : "";
+        if ("openrouter".equals(current) || "typesafe".equals(current) || "mock".equals(current)) {
+            this.provider = current;
+        } else if (config.resolveApiKey().startsWith("sk-or-")) {
+            this.provider = "openrouter";
+        } else {
+            this.provider = "mock";
+        }
         this.fairMode = config.fairMode;
     }
 
     private Component getProviderComponent() {
-        return Component.literal("Provider: " + (isTypeSafe ? "§bTypeSafe AI (Live)" : "§eMock (Simulated)"));
+        return switch (provider) {
+            case "openrouter" -> Component.literal("Provider: §dOpenRouter (Live LLM)");
+            case "typesafe" -> Component.literal("Provider: §bTypeSafe AI (Live)");
+            default -> Component.literal("Provider: §eMock (Simulated)");
+        };
     }
 
     private Component getFairModeComponent() {
@@ -49,11 +60,32 @@ public class JevPlayerConfigScreen extends Screen {
         int leftX = centerX - fieldW / 2;
         int startY = 32;
 
-        // Provider Button
+        // Provider Button (cycles: OpenRouter -> TypeSafe AI -> Mock)
         this.providerButton = addRenderableWidget(
                 Button.builder(getProviderComponent(), btn -> {
-                    isTypeSafe = !isTypeSafe;
+                    if ("openrouter".equalsIgnoreCase(provider)) {
+                        provider = "typesafe";
+                    } else if ("typesafe".equalsIgnoreCase(provider)) {
+                        provider = "mock";
+                    } else {
+                        provider = "openrouter";
+                    }
                     btn.setMessage(getProviderComponent());
+                    if ("openrouter".equalsIgnoreCase(provider)) {
+                        if (baseUrlEdit != null && (baseUrlEdit.getValue().isEmpty() || baseUrlEdit.getValue().contains("typesafe.ai"))) {
+                            baseUrlEdit.setValue("https://openrouter.ai/api/v1");
+                        }
+                        if (modelEdit != null && (modelEdit.getValue().isEmpty() || modelEdit.getValue().equalsIgnoreCase("jev-latest"))) {
+                            modelEdit.setValue("google/gemini-2.5-flash");
+                        }
+                    } else if ("typesafe".equalsIgnoreCase(provider)) {
+                        if (baseUrlEdit != null && (baseUrlEdit.getValue().isEmpty() || baseUrlEdit.getValue().contains("openrouter.ai"))) {
+                            baseUrlEdit.setValue("https://api.typesafe.ai/v1");
+                        }
+                        if (modelEdit != null && (modelEdit.getValue().isEmpty() || modelEdit.getValue().contains("/"))) {
+                            modelEdit.setValue("jev-latest");
+                        }
+                    }
                 }).bounds(leftX, startY, fieldW, 20).build()
         );
 
@@ -119,7 +151,7 @@ public class JevPlayerConfigScreen extends Screen {
 
         extractor.centeredText(this.font, Component.literal("§6§lJevPlayer Settings"), centerX, 12, 0xFFFFFFFF);
 
-        extractor.text(this.font, Component.literal("§7API Key (or env TYPESAFE_AI_API_KEY):"), leftX, startY + 25, 0xFFAAAAAA);
+        extractor.text(this.font, Component.literal("§7API Key (OpenRouter or TypeSafe AI):"), leftX, startY + 25, 0xFFAAAAAA);
         extractor.text(this.font, Component.literal("§7Model:"), leftX, startY + 61, 0xFFAAAAAA);
         extractor.text(this.font, Component.literal("§7Base URL:"), leftX, startY + 97, 0xFFAAAAAA);
         extractor.text(this.font, Component.literal("§7Min Interval (ms):"), leftX, startY + 169, 0xFFAAAAAA);
@@ -139,7 +171,7 @@ public class JevPlayerConfigScreen extends Screen {
 
     private void saveAndClose() {
         try {
-            config.provider = isTypeSafe ? "typesafe" : "mock";
+            config.provider = provider;
             config.apiKey = apiKeyEdit.getValue().trim();
             config.model = modelEdit.getValue().trim();
             config.baseUrl = baseUrlEdit.getValue().trim();
@@ -160,7 +192,7 @@ public class JevPlayerConfigScreen extends Screen {
             if (this.minecraft != null && this.minecraft.player != null) {
                 this.minecraft.player.sendSystemMessage(
                         Component.literal("§a[JevPlayer] Settings saved! Active Provider: §f" + config.provider +
-                                (isTypeSafe ? " §7(Key: §e" + config.getRedactedApiKey() + "§7)" : ""))
+                                (!"mock".equalsIgnoreCase(config.provider) ? " §7(Key: §e" + config.getRedactedApiKey() + "§7)" : ""))
                 );
             }
             onClose();

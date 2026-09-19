@@ -93,7 +93,14 @@ public final class JevPlayerEngine implements AutoCloseable {
     }
 
     private void initProvider() {
-        if ("typesafe".equalsIgnoreCase(config.provider) && !config.resolveApiKey().isEmpty()) {
+        String effectiveKey = config.resolveApiKey();
+        boolean isOpenRouter = "openrouter".equalsIgnoreCase(config.provider)
+                || effectiveKey.startsWith("sk-or-")
+                || (config.baseUrl != null && config.baseUrl.contains("openrouter.ai"));
+
+        if (isOpenRouter && !effectiveKey.isEmpty()) {
+            this.decisionProvider = new OpenRouterProvider(config);
+        } else if ("typesafe".equalsIgnoreCase(config.provider) && !effectiveKey.isEmpty()) {
             this.decisionProvider = new TypeSafeProvider(config);
         } else {
             this.decisionProvider = new MockProvider();

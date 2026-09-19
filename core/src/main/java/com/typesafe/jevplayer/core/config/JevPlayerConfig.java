@@ -64,7 +64,7 @@ public final class JevPlayerConfig {
         if (maxSpendUsd < 0) maxSpendUsd = 0.50;
         if (episodeMinutes <= 0) episodeMinutes = 60;
         if (safeDefaultAction == null || safeDefaultAction.isBlank()) safeDefaultAction = "explore";
-        if (provider == null || (!provider.equalsIgnoreCase("typesafe") && !provider.equalsIgnoreCase("mock"))) {
+        if (provider == null || (!provider.equalsIgnoreCase("typesafe") && !provider.equalsIgnoreCase("openrouter") && !provider.equalsIgnoreCase("mock"))) {
             provider = "mock";
         }
         if (confidenceThresholds == null) {
@@ -90,9 +90,19 @@ public final class JevPlayerConfig {
         if (apiKey != null && !apiKey.isBlank()) {
             return apiKey.trim();
         }
-        String envKey = System.getenv(apiKeyEnvVar != null ? apiKeyEnvVar : "TYPESAFE_AI_API_KEY");
-        if (envKey != null && !envKey.isBlank()) {
-            return envKey.trim();
+        if (apiKeyEnvVar != null && !apiKeyEnvVar.isBlank()) {
+            String envKey = System.getenv(apiKeyEnvVar.trim());
+            if (envKey != null && !envKey.isBlank()) {
+                return envKey.trim();
+            }
+        }
+        String orKey = System.getenv("OPENROUTER_API_KEY");
+        if (orKey != null && !orKey.isBlank()) {
+            return orKey.trim();
+        }
+        String tsKey = System.getenv("TYPESAFE_AI_API_KEY");
+        if (tsKey != null && !tsKey.isBlank()) {
+            return tsKey.trim();
         }
         return "";
     }
