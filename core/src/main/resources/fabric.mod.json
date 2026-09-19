@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "jevplayer-core",
+  "version": "${version}",
+  "name": "JevPlayer Core",
+  "description": "Core decision engine and state models for JevPlayer",
+  "authors": [
+    "oiupoyt",
+    "TypeSafe AI"
+  ],
+  "contact": {
+    "homepage": "https://github.com/oiupoyt/JevPlays",
+    "sources": "https://github.com/oiupoyt/JevPlays"
+  },
+  "license": "MIT",
+  "environment": "*"
+}
