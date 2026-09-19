@@ -1,0 +1,18 @@
+allprojects {
+    group = project.maven_group
+    version = project.mod_version
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'Babbaj'
+            url = 'https://babbaj.github.io/maven/'
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "jevplayer",
+  "version": "${version}",
+  "name": "JevPlayer",
+  "description": "Fabric mod where TypeSafe's Jev plays Minecraft autonomously through Baritone",
+  "authors": [
+    "oiupoyt",
+    "TypeSafe AI"
+  ],
+  "contact": {
+    "homepage": "https://github.com/oiupoyt/JevPlays",
+    "sources": "https://github.com/oiupoyt/JevPlays"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.typesafe.jevplayer.adapter26_2.JevPlayerClientMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~26.2",
+    "java": ">=25"
+  },
+  "suggests": {
+    "baritone": ">=1.19.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "apiKey": "sk_test_placeholder_replace_with_your_key",
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "mockMode": false,
+  "confidenceThreshold": 0.65,
+  "fairMode": true,
+  "allowMultiplayer": false,
+  "spendCapUsd": 1.0,
+  "debugOverlay": true,
+  "cinematicCamera": true,
+  "hudRefreshRateMs": 200,
+  "logReplay": false,
+  "replayLogPath": "decision_log.jsonl"
+}

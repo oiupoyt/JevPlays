@@ -1,0 +1,32 @@
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Loom / Minecraft run directory
+run/
+*/run/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets & Configs with sensitive credentials
+*.env
+.env.*
+!*.env.example
+
+# Episode output data / runtime logs
+episode_events.json
+decision_log.jsonl
+*.log
+logs/
+crash-reports/

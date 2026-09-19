@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+    withSourcesJar()
+}
+
+dependencies {
+    implementation project(':core')
+    compileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+    compileOnly "org.slf4j:slf4j-api:2.0.16"
+    compileOnly files("${rootDir}/libs/baritone-api-fabric-1.19.0.jar")
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+jar {
+    from {
+        project(':core').sourceSets.main.output
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25
+}
