@@ -14,6 +14,9 @@ dependencies {
     compileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
     compileOnly "org.slf4j:slf4j-api:2.0.16"
     compileOnly files("${rootDir}/libs/baritone-api-fabric-1.19.0.jar")
+
+    compileOnly fileTree(dir: 'libs/fabric-api', include: ['*.jar'])
+    compileOnly fileTree(dir: "${System.getProperty('user.home')}/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/libraries", include: ['**/*.jar'])
 }
 
 processResources {
@@ -25,9 +28,10 @@ processResources {
 }
 
 jar {
-    from {
-        project(':core').sourceSets.main.output
-    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from({
+        project(':core').sourceSets.main.output.classesDirs
+    })
 }
 
 tasks.withType(JavaCompile).configureEach {

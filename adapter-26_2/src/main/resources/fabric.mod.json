@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "jevplayer",
-  "version": "${version}",
+  "version": "1.0.0",
   "name": "JevPlayer",
   "description": "Fabric mod where TypeSafe's Jev plays Minecraft autonomously through Baritone",
   "authors": [

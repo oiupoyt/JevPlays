@@ -3,6 +3,7 @@
 build/
 */build/
 !gradle/wrapper/gradle-wrapper.jar
+adapter-26_2/libs/
 
 # Loom / Minecraft run directory
 run/
